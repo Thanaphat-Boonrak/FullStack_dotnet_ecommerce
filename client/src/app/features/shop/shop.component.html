@@ -1,0 +1,49 @@
+<div class="flex flex-col gap-3">
+    <div class="flex gap-2 justify-between">
+        <mat-paginator (page)="handlePageEvent($event)" [length]="products()?.count" [pageSize]="shopParams().pageSize"
+            [pageIndex]="shopParams().pageNumber - 1" [showFirstLastButtons]="true" [pageSizeOptions]="pageSizeOptions"
+            aria-label="Select page"></mat-paginator>
+
+        <form #searchForm="ngForm" (ngSubmit)="onSearch()"
+            class="relative flex items-center w-full md:max-w-xl 2xl:max-w-5xl mx-4">
+            <input type="text" placeholder="Search"
+                class="block w-full h-10 p-4 text-sm text-gray-900 border border-gray-300 rounded-lg"
+                [(ngModel)]="shopParams().search" name="search" />
+
+            <button mat-icon-button type="submit" class="absolute right-11 flex items-center pl-3">
+                <mat-icon>search</mat-icon>
+            </button>
+        </form>
+ 
+        <div class="flex gap-3 pt-2">
+            <button mat-stroked-button (click)="openFiltersDialog()">
+                <mat-icon>filter_list</mat-icon>Filters
+            </button>
+            <button mat-stroked-button [matMenuTriggerFor]="sortMenu">
+                <mat-icon>swap_vert</mat-icon>
+                Sort
+            </button>
+        </div>
+    </div>
+    @if(productIsEmpty().length > 0){
+    <div class="grid grid-cols-5 gap-5">
+        @for (product of products()?.data; track product.id) {
+        <app-product-item [product]="product"></app-product-item>
+        }
+    </div>
+    }
+    @else{
+    <p class="mt-50 text-center text-gray-400 text-5xl">No Products Found</p>
+    }
+</div>
+
+
+<mat-menu #sortMenu="matMenu">]
+    <mat-selection-list [multiple]="false" (selectionChange)="onSortChange($event)">
+        @for(sort of sortOption; track $index){
+        <mat-list-option [value]="sort.value" [selected]="shopParams().sort === sort.value">{{
+            sort.name
+            }}</mat-list-option>
+        }
+    </mat-selection-list>
+</mat-menu>

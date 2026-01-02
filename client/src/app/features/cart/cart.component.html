@@ -1,0 +1,19 @@
+<section>
+    @if(cartService.cart()?.items?.length! > 0){
+        <div class="flex w-full items-start gap-6">
+            <div class="w-3/4">
+                @for(cartItem of cartService.cart()?.items; track cartItem.productId){
+                <app-cart-items [item]="cartItem"></app-cart-items>
+                }
+            </div>
+            <div class="w-1/4">
+                <app-order-summary></app-order-summary>
+            </div>
+        </div>
+    
+    }
+    @else{
+    <app-empty-state></app-empty-state>
+    }
+
+</section>

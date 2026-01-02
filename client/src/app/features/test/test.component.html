@@ -1,0 +1,17 @@
+<div class="flex justify-center">
+    <button matButton (click)="get400()">Bad Request</button>
+    <button matButton (click)="get401()">Unauthorized</button>
+    <button matButton (click)="get404()">Not Found</button>
+    <button matButton (click)="getvalid()">Valid Data</button>
+    <button matButton (click)="get500()">Internal Server Error </button>
+</div>
+
+@if(validationError().length > 0){
+<div>
+    <ul class="flex flex-col">
+        @for(error of validationError(); track $index){
+            <li>{{error}}</li>
+        }
+    </ul>
+</div>
+}

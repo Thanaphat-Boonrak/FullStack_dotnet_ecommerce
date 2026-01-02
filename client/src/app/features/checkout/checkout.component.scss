@@ -1,0 +1,8 @@
+:host ::ng-deep .mat-step-header .mat-ripple {
+    display: none !important;
+}
+
+:host ::ng-deep .mat-step-header:hover,
+:host ::ng-deep .mat-step-header:focus {
+    background-color: transparent !important;
+}
