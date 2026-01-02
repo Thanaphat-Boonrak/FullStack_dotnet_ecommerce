@@ -27,7 +27,7 @@ export class SignalrService {
 
   stopConnection() {
     if (this.hubConnection?.state === HubConnectionState.Connected) {
-      this.hubConnection?.stop().catch((err) => console.log(err));
+      this.hubConnection?.stop().catch((err:any) => console.log(err));
     }
   }
 }
