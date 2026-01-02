@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   baseAPI: '/api/',
   baseHub: '/hub/notification',
   stripePublicKey:
