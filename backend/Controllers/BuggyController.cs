@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using backend.Dtos;
 using Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -39,9 +40,10 @@ public class BuggyController : BaseController
     }
 
 
-    // [HttpGet("secret")]
-    // public IActionResult GetSecret()
-    // {
-    //     return Ok(User.FindFirst(ClaimTypes.Name).Value + " " + User.FindFirst(ClaimTypes.NameIdentifier).Value + " " + User.FindFirst(ClaimTypes.Email).Value);
-    // }
+    [HttpGet("admin-secret")]
+    [Authorize(Roles = "Admin")]
+    public IActionResult GetSecret()
+    {
+        return Ok(User.FindFirst(ClaimTypes.Name).Value + " " + User.FindFirst(ClaimTypes.NameIdentifier).Value + " " + User.FindFirst(ClaimTypes.Email).Value + " " + User.FindFirst(ClaimTypes.Role).Value);
+    }
 }

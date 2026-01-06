@@ -25,6 +25,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           case 401:
             snackBarService.error(err.error.title);
             break;
+          case 403:
+            snackBarService.error("Forbidden")
+            break;
           case 404:
             router.navigateByUrl('/not-found');
             break;

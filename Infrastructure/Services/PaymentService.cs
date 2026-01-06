@@ -65,4 +65,17 @@ public class PaymentService(IConfiguration config, ICartRepository cartRepositor
         await cartRepository.SetCartAsync(cart);
         return cart;
     }
+    
+    public async Task<string> RefundPayment(string paymentIntentId)
+    {
+        var refundOptions = new RefundCreateOptions()
+        {
+            PaymentIntent = paymentIntentId,
+        };
+        var refundService = new RefundService();
+        var result = await refundService.CreateAsync(refundOptions);
+        return result.Status;
+    }
+
+   
 }

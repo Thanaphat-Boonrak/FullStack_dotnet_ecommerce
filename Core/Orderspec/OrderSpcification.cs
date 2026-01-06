@@ -23,5 +23,27 @@ public class OrderSpecification : BaseSpecification<Order>
         AddInclude("OrderItems");
         AddInclude("DeliveryMethod");
     }
-    
+
+    public OrderSpecification(OrderSpecParam specParam) : base(x =>
+        string.IsNullOrEmpty(specParam.Status) || x.Status == parasStatus(specParam.Status))
+    {
+        AddInclude("OrderItems");
+        AddInclude("DeliveryMethod");
+        ApplyPaging(specParam.PageSize * (specParam.PageNumber - 1), specParam.PageSize);
+        AddOrderByDesc(x => x.OrderDate);
+    }
+
+    public OrderSpecification(int id) : base(x => x.Id == id)
+    {
+        AddInclude("OrderItems");
+        AddInclude("DeliveryMethod");
+    }
+
+
+
+    private static OrderStatus? parasStatus(string status)
+    {
+        if(Enum.TryParse<OrderStatus>(status,true,out var result)) return result;
+        return null;
+    }
 }

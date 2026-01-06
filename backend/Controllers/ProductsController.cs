@@ -1,8 +1,10 @@
 using backend.Dtos;
+using backend.RequestHelpers;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +14,7 @@ namespace backend.Controllers;
 
 public class ProductsController(IUnitOfWork unitOfWork) : BaseController
 {
-    
+    [Cache(600)]
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<Product>>> GetAllProduct([FromQuery]ProductSpecParams specParams)
     {
@@ -29,7 +31,9 @@ public class ProductsController(IUnitOfWork unitOfWork) : BaseController
         if (product == null) return NotFound($"Product {id} not found");
         return product;
     }
-
+    
+    [InvalidCache("api/products|")]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<Product>> CreateProduct(Product product)
     {
@@ -41,7 +45,8 @@ public class ProductsController(IUnitOfWork unitOfWork) : BaseController
         
         return BadRequest($"Product {product.Id} not found");
     }
-
+    
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:int}")]
     public async Task<ActionResult> UpdateProduct(int id, Product product)
     {
@@ -56,8 +61,9 @@ public class ProductsController(IUnitOfWork unitOfWork) : BaseController
         }
         return BadRequest($"Product {id} not updated");
     }
-
-
+    
+    [InvalidCache("api/products|")]
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> DeleteProduct(int id)
     {

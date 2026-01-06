@@ -23,7 +23,7 @@ public class AccountController(SignInManager<AppUser> signInManager) : BaseContr
             UserName = registerDto.Email,
         };
         var result = await signInManager.UserManager.CreateAsync(user, registerDto.Password!);
-
+        await signInManager.UserManager.AddToRoleAsync(user, "Customer");
         if (!result.Succeeded)
         {
             foreach (var error in result.Errors)
@@ -57,6 +57,7 @@ public class AccountController(SignInManager<AppUser> signInManager) : BaseContr
             user.LastName,
             user.Email,
             address = user.Address?.ToDto(),
+            roles = User.FindFirstValue(ClaimTypes.Role)
         });
     }
 

@@ -20,7 +20,9 @@ public class StoreContext(DbContextOptions options): IdentityDbContext<AppUser>(
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductConfiguration).Assembly);
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(DeliveryMethodConfiguration).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(
+            typeof(StoreContext).Assembly
+        );
+
     }
 }

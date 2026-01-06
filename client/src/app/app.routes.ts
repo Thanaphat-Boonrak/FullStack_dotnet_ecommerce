@@ -15,6 +15,8 @@ import { CheckoutSuccessComponent } from './features/checkout/checkout-success/c
 import { OrderComponent } from './features/orders/order.component';
 import { OrderDetailedComponent } from './features/orders/order-detailed/order-detailed.component';
 import { checkoutSuccessGuard } from './core/guards/checkout-success-guard';
+import { adminGuard } from './core/guards/admin-guard';
+import { AdminComponent } from './features/admin/admin.component';
 
 export const routes: Routes = [
   {
@@ -31,31 +33,11 @@ export const routes: Routes = [
   },
   {
     path: 'checkout',
-    component: CheckoutComponent,
-    canActivate: [authGuard, cartGuard],
-  },
-  {
-    path: 'checkout/success',
-    component: CheckoutSuccessComponent,
-    canActivate: [authGuard,checkoutSuccessGuard],
+    loadChildren: () => import('./features/checkout/route').then((r) => r.checkoutRoutes),
   },
   {
     path: 'orders',
-    component: OrderComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'orders/:id',
-    component: OrderDetailedComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'account/login',
-    component: LoginComponent,
-  },
-  {
-    path: 'account/register',
-    component: RegisterComponent,
+    loadChildren: () => import('./features/orders/route').then((r) => r.orderRoute),
   },
 
   {
@@ -67,12 +49,21 @@ export const routes: Routes = [
     component: NotFoundComponent,
   },
   {
+    path: 'account',
+    loadChildren: () => import('./features/account/route').then((r) => r.accountRoute),
+  },
+  {
     path: 'server-error',
     component: ServerErrorComponent,
   },
   {
     path: 'test-error',
     component: TestComponent,
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./features/admin/admin.component').then(c => c.AdminComponent),
+    canActivate: [authGuard, adminGuard],
   },
   {
     path: '**',

@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import type { Address, User } from '../../shared/models/user';
@@ -13,9 +13,14 @@ export class AccountService {
   private baseUrl = environment.baseAPI;
   private http = inject(HttpClient);
   currentUser = signal<User | null>(null);
-  private signalRService = inject(SignalrService)
+  private signalRService = inject(SignalrService);
+  isAdmin = computed(() => {
+    const roles = this.currentUser()?.roles;
+    return Array.isArray(roles) ? roles.includes("Admin"): roles === 'Admin'
+  });
+  
   login(values: any) {
-    this.signalRService.createHubConnection()
+    this.signalRService.createHubConnection();
     let params = new HttpParams();
     params = params.append('useCookies', true);
     return this.http.post<User>(this.baseUrl + 'login', values, { params, withCredentials: true });
@@ -37,7 +42,7 @@ export class AccountService {
   logout() {
     return this.http.post(this.baseUrl + 'account/logout', {}).pipe(
       tap(() => {
-        this.signalRService.stopConnection()
+        this.signalRService.stopConnection();
       })
     );
   }
@@ -45,15 +50,15 @@ export class AccountService {
   updateAddress(address: Address) {
     return this.http.post(this.baseUrl + 'account/address', address).pipe(
       tap(() => {
-        this.currentUser.update(user => {
-          if(user) user.address = address
-          return user
-        })
+        this.currentUser.update((user) => {
+          if (user) user.address = address;
+          return user;
+        });
       })
     );
   }
 
   getAuthState() {
-    return this.http.get<{isAuthenticated:boolean}>(this.baseUrl + 'account');
+    return this.http.get<{ isAuthenticated: boolean }>(this.baseUrl + 'account');
   }
 }

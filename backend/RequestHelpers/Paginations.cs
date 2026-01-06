@@ -1,4 +1,4 @@
-namespace backend.Dtos;
+namespace backend.RequestHelpers;
 
 public class Paginations<T>(int pageIndex, int pageSize,int count,IReadOnlyList<T> data)
 {

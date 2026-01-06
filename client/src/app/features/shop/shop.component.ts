@@ -45,6 +45,8 @@ export class ShopComponent implements OnInit {
 
   ngOnInit(): void {
     this.initialzedShop();
+    console.log(this.products());
+    
   }
 
   constructor() {
